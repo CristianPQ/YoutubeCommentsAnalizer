@@ -165,20 +165,20 @@ if __name__ == "__main__":
   argparser.add_argument("--videoid",
     help="Required; ID for video for which the comment will be inserted.")
   # The "text" option specifies the text that will be used as comment.
-  argparser.add_argument("--text", help="Required; text that will be used as comment.")
+  #argparser.add_argument("--text", help="Required; text that will be used as comment.")
   args = argparser.parse_args()
 
   if not args.videoid:
     exit("Please specify videoid using the --videoid= parameter.")
-  if not args.text:
-    exit("Please specify text using the --text= parameter.")
+  # if not args.text:
+  #   exit("Please specify text using the --text= parameter.")
 
   youtube = get_authenticated_service(args)
   # All the available methods are used in sequence just for the sake of an example.
   try:
     video_comment_threads = get_comment_threads(youtube, args.videoid)
     parent_id = video_comment_threads[0]["id"]
-    insert_comment(youtube, parent_id, args.text)
+    # insert_comment(youtube, parent_id, args.text)
     video_comments = get_comments(youtube, parent_id)
     update_comment(youtube, video_comments[0])
     set_moderation_status(youtube, video_comments[0])
