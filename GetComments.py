@@ -6,6 +6,7 @@
 import httplib2
 import os
 import sys
+import json
 
 from apiclient.discovery import build_from_document
 from apiclient.errors import HttpError
@@ -178,12 +179,16 @@ if __name__ == "__main__":
   try:
     video_comment_threads = get_comment_threads(youtube, args.videoid)
     parent_id = video_comment_threads[0]["id"]
+    with open('comments.json', 'w') as outfile:
+      json.dump(video_comment_threads, outfile)
     # insert_comment(youtube, parent_id, args.text)
     video_comments = get_comments(youtube, parent_id)
-    update_comment(youtube, video_comments[0])
-    set_moderation_status(youtube, video_comments[0])
-    mark_as_spam(youtube, video_comments[0])
-    delete_comment(youtube, video_comments[0])
+    with open('replies.json', 'w') as outfile: # writes in replies.json
+      json.dump(video_comments, outfile)
+    update_comment(youtube, video_comments[0]) # out of range because video_comments is empty
+    # set_moderation_status(youtube, video_comments[0])
+    # mark_as_spam(youtube, video_comments[0])
+    # delete_comment(youtube, video_comments[0])
   except HttpError, e:
     print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
   else:
